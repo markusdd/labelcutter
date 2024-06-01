@@ -4,10 +4,9 @@ If you like this, a small donation is appreciated:
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/R6R8DQO8C)
 
-**HELP WANTED:** If you want support for more label types, I need ORIGINAL pdfs or images like they come from the shipping provider, screenshots won't work. And a description how they should be transformed (just cropped, oor e.g. sliced for 62mm endless labels like the example below).
+**HELP WANTED:** If you want support for more label types, I need *ORIGINAL* PDFs or image files like they come from the shipping provider, screenshots won't work. And a description how they should be transformed (just cropped, or e.g. sliced for 62mm endless labels like the example below). Send them to mkddsx@gmail.com and open an issue here.
 
-We all know the annoying habit of shipping providers to only give you an A4 or US-Letter page
-as a shipping label.
+We all know the annoying habit of shipping providers to only give you an A4 or US-Letter page as a shipping label.
 
 This program aims to change that with a simple CLI call. Locally, on your computer, no need to upload your labels to a foreign webpage where you don't know what happens there with your information.
 
