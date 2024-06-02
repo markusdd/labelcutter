@@ -1,4 +1,5 @@
 **/*.pdf
+*.png
 build/
 dist/
 labelcutter.spec
