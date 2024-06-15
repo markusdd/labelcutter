@@ -85,7 +85,6 @@ with pikepdf.open(opts.file) as pdf:
                 page_size = [280,424]  # 100x150mm (standard 4x6" label)
 
             new_page = pdf_rearranged.add_blank_page(page_size=page_size)
-            print(c)
             # rearrangement to fit into 100x150mm (4x6") standard labels
             # or 62mmx150mm Brother endless labels
 
