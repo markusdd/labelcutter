@@ -11,8 +11,8 @@ We all know the annoying habit of shipping providers to only give you an A4 or U
 This program aims to change that with a simple CLI call. Locally, on your computer, no need to upload your labels to a foreign webpage where you don't know what happens there with your information.
 
 **NOTE:**
-This is an early version with support for typical A4-sized DHL label PDFs. I plan to extend that,
-but I need example labels. (Hermes, UPS, GLS, FedEx, TNT, 'Retour'-Labels, whatever you need)
+This is an early version with support for typical A4-sized DHL label and Hermes label PDFs. I plan to extend that,
+but I need example labels. (UPS, GLS, FedEx, TNT, 'Retour'-Labels, whatever you need)
 
 **FAQ:**
 
@@ -24,11 +24,11 @@ but I need example labels. (Hermes, UPS, GLS, FedEx, TNT, 'Retour'-Labels, whate
 
 - add support for more labels and formats (if needed)
 - make outfilename configurable
-- code refactor: define a container per input label type that describes the needed transformations
+- code refactor: define a container per input label type that describes the needed transformations or at least factor out some repeated functions
 
 **Examples:**
 
-Example below, converted via: `python labelcutter.py --type DHL_A4 example_DHL_A4.pdf`
+Example below, converted via: `python labelcutter.py --type DHL_A4 assets/example_DHL_A4.pdf`
 
 | Original (Example: DHL Germany on A4) | Label only extracted by labelcutter for proper 103x199mm DHL Labels |
 |---|---|
@@ -41,3 +41,17 @@ Many people also have Brother 62mm endless label printers, for them, there is a 
 | Original (Example: DHL Germany on A4) | Label only extracted by labelcutter for Brother 62mm endless labels (print all 3 'pages', seperate and attach top to bottom to form the original label) |
 |---|---|
 | ![original](assets/example_original.png) | ![result_sliced](assets/example_result_sliced.png) |
+
+**More supported Labels:**
+
+Example below, converted via: `python labelcutter.py --type Hermes_A4 assets/example_Hermes_A4.pdf`
+
+| Original (Example: Hermes Germany on A4) | Label rearranged by labelcutter for 100x150mm standard 4x6" Labels |
+|---|---|
+| ![original](assets/example_Hermes_A4_original.png) | ![result](assets/example_Hermes_A4_result.png) |
+
+Example below, converted via: `python labelcutter.py --type Hermes_A4 --format Brother_62mm assets/example_Hermes_A4.pdf`
+
+| Original (Example: Hermes Germany on A4) | Label rearranged for Brother 62mm endless labels (62mmx150mm) |
+|---|---|
+| ![original](assets/example_Hermes_A4_original.png) | ![result](assets/example_Hermes_A4_Brother62mm_result.png) |
