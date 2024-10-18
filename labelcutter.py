@@ -10,9 +10,9 @@ parser = argparse.ArgumentParser(
 )
 
 parser.add_argument("file")
-parser.add_argument('-t', '--type', default="DHL_A4", choices=["DHL_A4", "Hermes_A4"])
+parser.add_argument('-t', '--type', default="DHL_A4", choices=["DHL_A4", "Hermes_A4", "GLS_A4"])
 # parser.add_argument('-o', '--outfile', default="")
-parser.add_argument('-f', '--format', default="", choices=["Brother_62mm"])
+parser.add_argument('-f', '--format', default="", choices=["Brother_62mm", "4x6"])
 
 opts = parser.parse_args()
 
@@ -65,7 +65,7 @@ with pikepdf.open(opts.file) as pdf:
                 c[2] = 583 # lower margin
                 c[3] = 774 # right margin
 
-                outname = f'{filename}_rearranged_forBrother62mm'
+                outname = f'{filename}_rotated_cropped_for103x199mm'
                 pdf.save(f'{outname}.pdf')
                 pages = pdf2image.convert_from_path(f'{outname}.pdf', dpi=203)
                 for page in pages:
@@ -175,4 +175,62 @@ with pikepdf.open(opts.file) as pdf:
             for page in pages:
                 page.save(f'{outname}.png', 'PNG')
 
-    
+        case "GLS_A4":
+            if not opts.format: 
+                page.rotate(90, relative=True)
+                c = page.mediabox
+                # normal cropping for 103x199mm DHL labels
+                c[0] = 19  # upper margin
+                c[1] = 540 # left margin
+                c[2] = 576 # lower margin
+                c[3] = 820 # right margin
+
+                outname = f'{filename}_rotated_cropped_for103x199mm'
+                pdf.save(f'{outname}.pdf')
+                pages = pdf2image.convert_from_path(f'{outname}.pdf', dpi=203)
+                for page in pages:
+                    page.save(f'{outname}.png', 'PNG')
+            elif opts.format in ["4x6", "Brother_62mm"]:
+                c = page.cropbox
+                pdf_rearranged = pikepdf.new()
+                if opts.format == "Brother_62mm":
+                    brother = True
+                    outname = f'{filename}_rearranged_forBrother62mm'
+                    page_size = [465,176]  # 62mm high and 165mm long
+                else:
+                    brother=False
+                    outname = f'{filename}_rearranged_for100x150mm'
+                    page_size = [280,424]  # 100x150mm (standard 4x6" label)
+
+                new_page = pdf_rearranged.add_blank_page(page_size=page_size)
+                # rearrangement to fit into 100x150mm (4x6") standard labels
+                # or 62mmx150mm Brother endless labels
+
+                # top matrix code section, 258px wide, 180px high
+                c[0] = 20 # left margin
+                c[1] = 562 # lower margin
+                c[2] = 278 # right margin
+                c[3] = 742 # upper margin                
+                if brother:
+                    rect = pikepdf.Rectangle(-5,0,273,176)
+                else:
+                    rect = pikepdf.Rectangle(11,234,269,414)
+                new_page.add_overlay(page, rect, shrink=True, expand=False)
+                # lower address section, 258px wide, 224px high
+                c[0] = 319 # left margin
+                c[1] = 562 # lower margin
+                c[2] = 577 # right margin
+                c[3] = 786 # upper margin
+                if brother:
+                    rect = pikepdf.Rectangle(215,0,510,176)
+                else:
+                    rect = pikepdf.Rectangle(11,11,269,235)
+                new_page.add_overlay(page, rect, shrink=True, expand=False)
+
+                pdf_rearranged.save(f'{outname}.pdf')
+                dpi = 300 if brother else 203
+                pages = pdf2image.convert_from_path(f'{outname}.pdf', dpi=dpi)
+                for page in pages:
+                    page.save(f'{outname}.png', 'PNG')
+
+        
